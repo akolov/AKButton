@@ -55,7 +55,7 @@ open class AKButton: UIControl {
 
   public var action: (() -> Void)?
 
-  var configuration: Configuration {
+  public var configuration: Configuration {
     didSet {
       configure()
     }
@@ -66,7 +66,7 @@ open class AKButton: UIControl {
 
   // MARK: Subviews
 
-  private lazy var containerView: UIView = {
+  public private(set) lazy var containerView: UIView = {
     let containerView = UIView()
     containerView.backgroundColor = .clear
     containerView.clipsToBounds = true
@@ -75,7 +75,7 @@ open class AKButton: UIControl {
     return containerView
   }()
 
-  private lazy var backgroundView: UIView = {
+  public private(set) lazy var backgroundView: UIView = {
     let backgroundView = UIView()
     if #available(iOS 13.0, *) {
       backgroundView.layer.cornerCurve = .continuous
@@ -84,14 +84,14 @@ open class AKButton: UIControl {
     return backgroundView
   }()
 
-  private lazy var foregroundView: UIStackView = {
+  public private(set) lazy var foregroundView: UIStackView = {
     let foregroundView = UIStackView()
     foregroundView.axis = .horizontal
     foregroundView.translatesAutoresizingMaskIntoConstraints = false
     return foregroundView
   }()
 
-  private lazy var titleLabel: UILabel = {
+  public private(set) lazy var titleLabel: UILabel = {
     let titleLabel = UILabel()
     titleLabel.adjustsFontForContentSizeCategory = true
     titleLabel.text = self.title
@@ -102,13 +102,13 @@ open class AKButton: UIControl {
 
   // MARK: Initializer
 
-  override init(frame: CGRect) {
+  public override init(frame: CGRect) {
     self.configuration = Configuration()
     super.init(frame: frame)
     commonInit()
   }
 
-  init(configuration: Configuration) {
+  public init(configuration: Configuration) {
     self.configuration = configuration
     super.init(frame: .zero)
     commonInit()
