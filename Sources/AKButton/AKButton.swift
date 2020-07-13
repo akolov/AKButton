@@ -92,7 +92,7 @@ open class AKButton: UIControl {
     foregroundView.axis = .horizontal
     foregroundView.translatesAutoresizingMaskIntoConstraints = false
     foregroundView.isLayoutMarginsRelativeArrangement = true
-    foregroundView.layoutMargins = self.layoutMargins
+    foregroundView.layoutMargins = self.configuration.layoutMargins
     return foregroundView
   }()
 
