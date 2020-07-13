@@ -116,7 +116,9 @@ open class AKButton: UIControl {
 
   @available(*, unavailable)
   public required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    self.configuration = Configuration()
+    super.init(coder: coder)
+    commonInit()
   }
 
   private func commonInit() {
