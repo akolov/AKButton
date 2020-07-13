@@ -44,7 +44,7 @@ open class AKButton: UIControl {
       self.tappedBrightnessOffset = tappedBrightnessOffset
       self.font = font
       self.spacing = spacing
-      self.layoutMargins = layoutMargins
+      self.layoutMargins = margins
     }
   }
 
