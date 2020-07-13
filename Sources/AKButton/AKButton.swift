@@ -50,9 +50,9 @@ open class AKButton: UIControl {
 
   // MARK: Properties
 
-  public var title = "Placeholder" {
+  public var title: (UIControl.State) -> String? = { _ in return "Placeholder" } {
     didSet {
-      titleLabel.text = title
+      titleLabel.text = title(state)
     }
   }
 
@@ -61,6 +61,24 @@ open class AKButton: UIControl {
   public var configuration: Configuration {
     didSet {
       configure()
+    }
+  }
+
+  public override var isEnabled: Bool {
+    didSet {
+      updateState()
+    }
+  }
+
+  public override var isHighlighted: Bool {
+    didSet {
+      updateState()
+    }
+  }
+
+  public override var isSelected: Bool {
+    didSet {
+      updateState()
     }
   }
 
@@ -99,7 +117,7 @@ open class AKButton: UIControl {
   public private(set) lazy var titleLabel: UILabel = {
     let titleLabel = UILabel()
     titleLabel.adjustsFontForContentSizeCategory = true
-    titleLabel.text = self.title
+    titleLabel.text = self.title(state)
     titleLabel.textAlignment = .center
     titleLabel.translatesAutoresizingMaskIntoConstraints = false
     return titleLabel
@@ -128,6 +146,7 @@ open class AKButton: UIControl {
 
   private func commonInit() {
     configure()
+    updateState()
 
     addSubview(containerView)
     containerView.addSubview(backgroundView)
@@ -180,6 +199,10 @@ open class AKButton: UIControl {
     titleLabel.textColor = configuration.foregroundColor
 
     resetForegroundAfterAnimations()
+  }
+
+  private func updateState() {
+    titleLabel.text = title(state)
   }
 
   // MARK: Tap handling
