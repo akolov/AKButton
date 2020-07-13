@@ -8,6 +8,7 @@
 
 import UIKit
 
+@IBDesignable
 open class AKButton: UIControl {
 
   public struct Configuration {
