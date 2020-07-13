@@ -12,8 +12,8 @@ open class AKButton: UIControl {
 
   public struct Configuration {
     public var cornerRadius: CGFloat
-    public var backgroundColor: UIColor
-    public var foregroundColor: UIColor
+    public var backgroundColor: (UIControl.State) -> UIColor
+    public var foregroundColor: (UIControl.State) -> UIColor
     public var tapAnimationDuration: TimeInterval
     public var tappedForegroundAlpha: CGFloat
     public var tappedBrightnessOffset: CGFloat
@@ -23,8 +23,8 @@ open class AKButton: UIControl {
 
     public init(
       cornerRadius: CGFloat = 8,
-      backgroundColor: UIColor = .systemBlue,
-      foregroundColor: UIColor = .white,
+      backgroundColor: @escaping (UIControl.State) -> UIColor = { _ in .systemBlue },
+      foregroundColor: @escaping (UIControl.State) -> UIColor = { _ in .white },
       tapAnimationDuration: TimeInterval = 0.3,
       tappedForegroundAlpha: CGFloat = 0.75,
       tappedBrightnessOffset: CGFloat = -0.1,
@@ -50,7 +50,7 @@ open class AKButton: UIControl {
 
   // MARK: Properties
 
-  public var title: (UIControl.State) -> String? = { _ in return "Placeholder" } {
+  public var title: (UIControl.State) -> String? = { _ in "Placeholder" } {
     didSet {
       titleLabel.text = title(state)
     }
@@ -146,7 +146,6 @@ open class AKButton: UIControl {
 
   private func commonInit() {
     configure()
-    updateState()
 
     addSubview(containerView)
     containerView.addSubview(backgroundView)
@@ -185,24 +184,26 @@ open class AKButton: UIControl {
   // MARK: Private methods
 
   private func configure() {
-    tappedBackgroundColor = Self.brightnessAdjusted(
-      color: configuration.backgroundColor,
-      amount: configuration.tappedBrightnessOffset
-    )
+    updateState()
 
-    backgroundView.backgroundColor = isTapped ? tappedBackgroundColor : configuration.backgroundColor
     backgroundView.layer.cornerRadius = configuration.cornerRadius
     foregroundView.spacing = configuration.spacing
     foregroundView.layoutMargins = configuration.layoutMargins
-    titleLabel.backgroundColor = configuration.backgroundColor
     titleLabel.font = configuration.font
-    titleLabel.textColor = configuration.foregroundColor
 
     resetForegroundAfterAnimations()
   }
 
   private func updateState() {
     titleLabel.text = title(state)
+    tappedBackgroundColor = Self.brightnessAdjusted(
+      color: configuration.backgroundColor(state),
+      amount: configuration.tappedBrightnessOffset
+    )
+
+    backgroundView.backgroundColor = isTapped ? tappedBackgroundColor : configuration.backgroundColor(state)
+    titleLabel.backgroundColor = configuration.backgroundColor(state)
+    titleLabel.textColor = configuration.foregroundColor(state)
   }
 
   // MARK: Tap handling
@@ -245,7 +246,9 @@ open class AKButton: UIControl {
     }
 
     let animations = {
-      self.backgroundView.backgroundColor = self.isTapped ? tappedBackgroundColor : self.configuration.backgroundColor
+      self.backgroundView.backgroundColor = self.isTapped
+        ? tappedBackgroundColor
+        : self.configuration.backgroundColor(self.state)
     }
 
     let completion = { (finished: Bool) in
@@ -304,7 +307,7 @@ open class AKButton: UIControl {
   }
 
   private func resetForegroundAfterAnimations() {
-    let color = isTapped ? .clear : configuration.backgroundColor
+    let color = isTapped ? .clear : configuration.backgroundColor(state)
     foregroundView.arrangedSubviews.forEach { $0.backgroundColor = color }
   }
 
