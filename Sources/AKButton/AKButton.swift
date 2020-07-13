@@ -19,6 +19,7 @@ open class AKButton: UIControl {
     public var tappedBrightnessOffset: CGFloat
     public var font: UIFont
     public var spacing: CGFloat
+    public var layoutMargins: UIEdgeInsets
 
     public init(
       cornerRadius: CGFloat = 8,
@@ -32,7 +33,8 @@ open class AKButton: UIControl {
         let metrics = UIFontMetrics(forTextStyle: .body)
         return metrics.scaledFont(for: font)
       }(),
-      spacing: CGFloat = 15
+      spacing: CGFloat = 15,
+      margins: UIEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
     ) {
       self.cornerRadius = cornerRadius
       self.backgroundColor = backgroundColor
@@ -42,6 +44,7 @@ open class AKButton: UIControl {
       self.tappedBrightnessOffset = tappedBrightnessOffset
       self.font = font
       self.spacing = spacing
+      self.layoutMargins = layoutMargins
     }
   }
 
@@ -88,6 +91,8 @@ open class AKButton: UIControl {
     let foregroundView = UIStackView()
     foregroundView.axis = .horizontal
     foregroundView.translatesAutoresizingMaskIntoConstraints = false
+    foregroundView.isLayoutMarginsRelativeArrangement = true
+    foregroundView.layoutMargins = self.layoutMargins
     return foregroundView
   }()
 
