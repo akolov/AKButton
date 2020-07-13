@@ -174,6 +174,7 @@ open class AKButton: UIControl {
     backgroundView.backgroundColor = isTapped ? tappedBackgroundColor : configuration.backgroundColor
     backgroundView.layer.cornerRadius = configuration.cornerRadius
     foregroundView.spacing = configuration.spacing
+    foregroundView.layoutMargins = configuration.layoutMargins
     titleLabel.backgroundColor = configuration.backgroundColor
     titleLabel.font = configuration.font
     titleLabel.textColor = configuration.foregroundColor
