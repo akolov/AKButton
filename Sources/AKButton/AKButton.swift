@@ -253,7 +253,6 @@ open class AKButton: UIControl {
 
     if !animated {
       animations()
-      completion(true)
     }
     else {
       UIView.animate(
