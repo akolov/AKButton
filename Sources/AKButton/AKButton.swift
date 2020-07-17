@@ -59,7 +59,7 @@ open class AKButton: UIControl {
 
   public var action: (() -> Void)?
 
-  public var configuration: Configuration {
+  open var configuration: Configuration {
     didSet {
       configure()
     }
