@@ -138,7 +138,6 @@ open class AKButton: UIControl {
     commonInit()
   }
 
-  @available(*, unavailable)
   public required init?(coder: NSCoder) {
     self.configuration = Configuration()
     super.init(coder: coder)
