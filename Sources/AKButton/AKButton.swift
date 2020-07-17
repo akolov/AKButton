@@ -109,6 +109,7 @@ open class AKButton: UIControl {
   public private(set) lazy var foregroundView: UIStackView = {
     let foregroundView = UIStackView()
     foregroundView.axis = .horizontal
+    foregroundView.alignment = .center
     foregroundView.translatesAutoresizingMaskIntoConstraints = false
     foregroundView.isLayoutMarginsRelativeArrangement = true
     foregroundView.layoutMargins = self.configuration.layoutMargins
@@ -169,10 +170,10 @@ open class AKButton: UIControl {
     NSLayoutConstraint.activate([
       foregroundView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
       foregroundView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-      foregroundView.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor),
-      containerView.trailingAnchor.constraint(greaterThanOrEqualTo: foregroundView.trailingAnchor),
-      foregroundView.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor),
-      containerView.bottomAnchor.constraint(greaterThanOrEqualTo: foregroundView.bottomAnchor)
+      foregroundView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+      containerView.trailingAnchor.constraint(equalTo: foregroundView.trailingAnchor),
+      foregroundView.topAnchor.constraint(equalTo: containerView.topAnchor),
+      containerView.bottomAnchor.constraint(equalTo: foregroundView.bottomAnchor)
     ])
 
     addTarget(self, action: #selector(didTouchDownInside), for: [.touchDown, .touchDownRepeat])
