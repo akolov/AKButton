@@ -119,6 +119,7 @@ open class AKButton: UIControl {
   public private(set) lazy var titleLabel: UILabel = {
     let titleLabel = UILabel()
     titleLabel.adjustsFontForContentSizeCategory = true
+    titleLabel.backgroundColor = .clear
     titleLabel.text = self.title(state)
     titleLabel.textAlignment = .center
     titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -191,8 +192,6 @@ open class AKButton: UIControl {
     foregroundView.spacing = configuration.spacing
     foregroundView.layoutMargins = configuration.layoutMargins
     titleLabel.font = configuration.font
-
-    resetForegroundAfterAnimations()
   }
 
   private func updateState() {
@@ -252,26 +251,17 @@ open class AKButton: UIControl {
         : self.configuration.backgroundColor(self.state)
     }
 
-    let completion = { (finished: Bool) in
-      guard finished else {
-        return
-      }
-
-      self.resetForegroundAfterAnimations()
-    }
-
     if !animated {
       animations()
       completion(true)
     }
     else {
-      prepareForegroundForAnimations()
       UIView.animate(
         withDuration: configuration.tapAnimationDuration,
         delay: 0,
         options: [.beginFromCurrentState],
         animations: animations,
-        completion: completion
+        completion: nil
       )
     }
   }
@@ -292,7 +282,6 @@ open class AKButton: UIControl {
       animations()
     }
     else {
-      prepareForegroundForAnimations()
       UIView.animate(
         withDuration: configuration.tapAnimationDuration,
         delay: 0,
@@ -301,15 +290,6 @@ open class AKButton: UIControl {
         completion: nil
       )
     }
-  }
-
-  private func prepareForegroundForAnimations() {
-    foregroundView.arrangedSubviews.forEach { $0.backgroundColor = .clear }
-  }
-
-  private func resetForegroundAfterAnimations() {
-    let color = isTapped ? .clear : configuration.backgroundColor(state)
-    foregroundView.arrangedSubviews.forEach { $0.backgroundColor = color }
   }
 
   // MARK: Private methods
