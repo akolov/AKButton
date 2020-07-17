@@ -218,9 +218,9 @@ open class AKButton: UIControl {
 
   @objc
   private func didTouchUpInside() {
-    isTapped = false
     updateForegroundAlpha(animated: true)
     updateBackgroundColor(animated: true)
+    isTapped = false
     sendActions(for: .primaryActionTriggered)
     action?()
   }
@@ -234,9 +234,9 @@ open class AKButton: UIControl {
 
   @objc
   private func didDragOutside() {
-    isTapped = false
     updateForegroundAlpha(animated: true)
     updateBackgroundColor(animated: true)
+    isTapped = false
   }
 
   // MARK: Animations
