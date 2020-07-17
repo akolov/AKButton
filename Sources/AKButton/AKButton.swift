@@ -65,19 +65,19 @@ open class AKButton: UIControl {
     }
   }
 
-  public override var isEnabled: Bool {
+  open override var isEnabled: Bool {
     didSet {
       updateState()
     }
   }
 
-  public override var isHighlighted: Bool {
+  open override var isHighlighted: Bool {
     didSet {
       updateState()
     }
   }
 
-  public override var isSelected: Bool {
+  open override var isSelected: Bool {
     didSet {
       updateState()
     }
