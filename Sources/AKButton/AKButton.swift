@@ -217,6 +217,7 @@ open class AKButton: UIControl {
 
     backgroundView.backgroundColor = isTapped ? tappedBackgroundColor : configuration.backgroundColor(state)
     titleLabel.textColor = configuration.foregroundColor(state)
+    imageView.tintColor = configuration.foregroundColor(state)
   }
 
   // MARK: Tap handling
