@@ -57,6 +57,13 @@ open class AKButton: UIControl {
     }
   }
 
+  public var image: (UIControl.State) -> UIImage? = { _ in nil } {
+    didSet {
+      imageView.image = image(state)
+      imageView.isHidden = imageView.image == nil
+    }
+  }
+
   public var action: (() -> Void)?
 
   open var configuration: Configuration {
@@ -126,6 +133,12 @@ open class AKButton: UIControl {
     return titleLabel
   }()
 
+  public let imageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.isHidden = true
+    return imageView
+  }()
+
   // MARK: Initializer
 
   public override init(frame: CGRect) {
@@ -152,6 +165,7 @@ open class AKButton: UIControl {
     addSubview(containerView)
     containerView.addSubview(backgroundView)
     containerView.addSubview(foregroundView)
+    foregroundView.addArrangedSubview(imageView)
     foregroundView.addArrangedSubview(titleLabel)
 
     NSLayoutConstraint.activate([
