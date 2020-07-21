@@ -54,13 +54,16 @@ open class AKButton: UIControl {
   public var title: (UIControl.State) -> String? = { _ in "Placeholder" } {
     didSet {
       titleLabel.text = title(state)
+      titleLabel.isHidden = titleLabel.text == nil
     }
   }
 
-  public var image: (UIControl.State) -> UIImage? = { _ in nil } {
+  public var image: (UIControl.State) -> (UIImage?, UIImageView.ContentMode) = { _ in (nil, .scaleToFill) } {
     didSet {
-      imageView.image = image(state)
-      imageView.isHidden = imageView.image == nil
+      let (_image, contentMode) = image(state)
+      imageView.image = _image
+      imageView.isHidden = _image == nil
+      imageView.contentMode = contentMode
     }
   }
 
@@ -136,6 +139,7 @@ open class AKButton: UIControl {
   public let imageView: UIImageView = {
     let imageView = UIImageView()
     imageView.isHidden = true
+    imageView.contentMode = .scaleToFill
     return imageView
   }()
 
