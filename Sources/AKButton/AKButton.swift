@@ -93,6 +93,12 @@ open class AKButton: UIControl {
     }
   }
 
+  open var isLoading: Bool = false {
+    didSet {
+      updateLoadingState()
+    }
+  }
+
   private var isTapped: Bool = false
   private var tappedBackgroundColor: UIColor?
 
@@ -143,6 +149,8 @@ open class AKButton: UIControl {
     return imageView
   }()
 
+  public let loadingIndicator = UIActivityIndicatorView()
+
   // MARK: Initializer
 
   public override init(frame: CGRect) {
@@ -169,6 +177,7 @@ open class AKButton: UIControl {
     addSubview(containerView)
     containerView.addSubview(backgroundView)
     containerView.addSubview(foregroundView)
+    containerView.addSubview(loadingIndicator)
     foregroundView.addArrangedSubview(imageView)
     foregroundView.addArrangedSubview(titleLabel)
 
@@ -190,9 +199,18 @@ open class AKButton: UIControl {
       foregroundView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
       foregroundView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
       foregroundView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-      containerView.trailingAnchor.constraint(equalTo: foregroundView.trailingAnchor),
+      foregroundView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
       foregroundView.topAnchor.constraint(equalTo: containerView.topAnchor),
-      containerView.bottomAnchor.constraint(equalTo: foregroundView.bottomAnchor)
+      foregroundView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+    ])
+
+    NSLayoutConstraint.activate([
+      loadingIndicator.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+      loadingIndicator.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+      loadingIndicator.leadingAnchor.constraint(greaterThanOrEqualTo: self.leadingAnchor),
+      loadingIndicator.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor),
+      loadingIndicator.topAnchor.constraint(greaterThanOrEqualTo: self.topAnchor),
+      loadingIndicator.bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor)
     ])
 
     addTarget(self, action: #selector(didTouchDownInside), for: [.touchDown, .touchDownRepeat])
@@ -222,6 +240,18 @@ open class AKButton: UIControl {
     backgroundView.backgroundColor = isTapped ? tappedBackgroundColor : configuration.backgroundColor(state)
     titleLabel.textColor = configuration.foregroundColor(state)
     imageView.tintColor = configuration.foregroundColor(state)
+    loadingIndicator.color = configuration.foregroundColor(state)
+  }
+
+  private func updateLoadingState() {
+    foregroundView.isHidden = isLoading
+    if isLoading {
+      loadingIndicator.color = configuration.foregroundColor(state)
+      loadingIndicator.startAnimating()
+    }
+    else {
+      loadingIndicator.stopAnimating()
+    }
   }
 
   // MARK: Tap handling
