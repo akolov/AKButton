@@ -150,10 +150,15 @@ open class AKButton: UIControl {
     let imageView = UIImageView()
     imageView.isHidden = true
     imageView.contentMode = .scaleToFill
+    imageView.translatesAutoresizingMaskIntoConstraints = false
     return imageView
   }()
 
-  public let loadingIndicator = UIActivityIndicatorView()
+  public let loadingIndicator: UIActivityIndicatorView = {
+    let loadingIndicator = UIActivityIndicatorView()
+    loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+    return loadingIndicator
+  }()
 
   // MARK: Initializer
 
@@ -209,12 +214,12 @@ open class AKButton: UIControl {
     ])
 
     NSLayoutConstraint.activate([
-      loadingIndicator.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-      loadingIndicator.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-      loadingIndicator.leadingAnchor.constraint(greaterThanOrEqualTo: self.leadingAnchor),
-      loadingIndicator.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor),
-      loadingIndicator.topAnchor.constraint(greaterThanOrEqualTo: self.topAnchor),
-      loadingIndicator.bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor)
+      loadingIndicator.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+      loadingIndicator.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+      loadingIndicator.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor),
+      loadingIndicator.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor),
+      loadingIndicator.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor),
+      loadingIndicator.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor)
     ])
 
     addTarget(self, action: #selector(didTouchDownInside), for: [.touchDown, .touchDownRepeat])
