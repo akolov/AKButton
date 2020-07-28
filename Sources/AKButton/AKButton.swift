@@ -51,10 +51,15 @@ open class AKButton: UIControl {
 
   // MARK: Properties
 
+  public var attributedTitle: ((UIControl.State) -> NSAttributedString?)? {
+    didSet {
+      updateTitle()
+    }
+  }
+
   public var title: (UIControl.State) -> String? = { _ in "Placeholder" } {
     didSet {
-      titleLabel.text = title(state)
-      titleLabel.isHidden = titleLabel.text == nil
+      updateTitle()
     }
   }
 
@@ -252,6 +257,20 @@ open class AKButton: UIControl {
     else {
       loadingIndicator.stopAnimating()
     }
+  }
+
+  private func updateTitle() {
+    if let attributedTitle = attributedTitle?(state) {
+      titleLabel.attributedText = attributedTitle
+    }
+    else if let title = title(state) {
+      titleLabel.text = title
+    }
+    else {
+      titleLabel.text = nil
+    }
+
+    titleLabel.isHidden = titleLabel.text == nil && titleLabel.attributedText == nil
   }
 
   // MARK: Tap handling
