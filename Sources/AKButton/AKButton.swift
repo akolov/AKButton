@@ -141,7 +141,6 @@ open class AKButton: UIControl {
     let titleLabel = UILabel()
     titleLabel.adjustsFontForContentSizeCategory = true
     titleLabel.backgroundColor = .clear
-    titleLabel.text = self.title(state)
     titleLabel.textAlignment = .center
     titleLabel.translatesAutoresizingMaskIntoConstraints = false
     return titleLabel
@@ -236,7 +235,8 @@ open class AKButton: UIControl {
   }
 
   private func updateState() {
-    titleLabel.text = title(state)
+    updateTitle()
+
     tappedBackgroundColor = Self.brightnessAdjusted(
       color: configuration.backgroundColor(state),
       amount: configuration.tappedBrightnessOffset
