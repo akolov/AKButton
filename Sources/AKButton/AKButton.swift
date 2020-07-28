@@ -235,8 +235,6 @@ open class AKButton: UIControl {
   }
 
   private func updateState() {
-    updateTitle()
-
     tappedBackgroundColor = Self.brightnessAdjusted(
       color: configuration.backgroundColor(state),
       amount: configuration.tappedBrightnessOffset
@@ -246,6 +244,8 @@ open class AKButton: UIControl {
     titleLabel.textColor = configuration.foregroundColor(state)
     imageView.tintColor = configuration.foregroundColor(state)
     loadingIndicator.color = configuration.foregroundColor(state)
+
+    updateTitle()
   }
 
   private func updateLoadingState() {
