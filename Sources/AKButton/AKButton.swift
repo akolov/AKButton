@@ -11,10 +11,16 @@ import UIKit
 @IBDesignable
 open class AKButton: UIControl {
 
+  public struct BorderStyle {
+    public var color: UIColor
+    public var width: CGFloat
+  }
+
   public struct Configuration {
     public var cornerRadius: CGFloat
     public var backgroundColor: (UIControl.State) -> UIColor
     public var foregroundColor: (UIControl.State) -> UIColor
+    public var borderStyle: ((UIControl.State) -> BorderStyle?)?
     public var tapAnimationDuration: TimeInterval
     public var tappedForegroundAlpha: CGFloat
     public var tappedBrightnessOffset: CGFloat
@@ -26,6 +32,7 @@ open class AKButton: UIControl {
       cornerRadius: CGFloat = 8,
       backgroundColor: @escaping (UIControl.State) -> UIColor = { _ in .systemBlue },
       foregroundColor: @escaping (UIControl.State) -> UIColor = { _ in .white },
+      borderStyle: ((UIControl.State) -> BorderStyle?)? = nil,
       tapAnimationDuration: TimeInterval = 0.3,
       tappedForegroundAlpha: CGFloat = 0.75,
       tappedBrightnessOffset: CGFloat = -0.1,
@@ -40,6 +47,7 @@ open class AKButton: UIControl {
       self.cornerRadius = cornerRadius
       self.backgroundColor = backgroundColor
       self.foregroundColor = foregroundColor
+      self.borderStyle = borderStyle
       self.tapAnimationDuration = tapAnimationDuration
       self.tappedForegroundAlpha = tappedForegroundAlpha
       self.tappedBrightnessOffset = tappedBrightnessOffset
@@ -105,7 +113,24 @@ open class AKButton: UIControl {
   }
 
   private var isTapped: Bool = false
-  private var tappedBackgroundColor: UIColor?
+
+  private var tappedBackgroundColor: UIColor? {
+    return Self.brightnessAdjusted(
+      color: configuration.backgroundColor(state),
+      amount: configuration.tappedBrightnessOffset
+    )
+  }
+
+  private var tappedBorderColor: UIColor? {
+    guard let borderStyle = configuration.borderStyle?(state) else {
+      return nil
+    }
+
+    return Self.brightnessAdjusted(
+      color: borderStyle.color,
+      amount: configuration.tappedBrightnessOffset
+    )
+  }
 
   // MARK: Subviews
 
@@ -240,15 +265,24 @@ open class AKButton: UIControl {
   }
 
   private func updateState() {
-    tappedBackgroundColor = Self.brightnessAdjusted(
-      color: configuration.backgroundColor(state),
-      amount: configuration.tappedBrightnessOffset
-    )
-
     backgroundView.backgroundColor = isTapped ? tappedBackgroundColor : configuration.backgroundColor(state)
     titleLabel.textColor = configuration.foregroundColor(state)
     imageView.tintColor = configuration.foregroundColor(state)
     loadingIndicator.color = configuration.foregroundColor(state)
+
+    if let borderStyle = configuration.borderStyle?(state) {
+      let tappedBorderColor = Self.brightnessAdjusted(
+        color: borderStyle.color,
+        amount: configuration.tappedBrightnessOffset
+      )
+
+      backgroundView.layer.borderColor = tappedBorderColor?.cgColor
+      backgroundView.layer.borderWidth = borderStyle.width
+    }
+    else {
+      backgroundView.layer.borderColor = nil
+      backgroundView.layer.borderWidth = 0
+    }
 
     updateTitle()
   }
@@ -285,6 +319,7 @@ open class AKButton: UIControl {
     isTapped = true
     updateForegroundAlpha(animated: true)
     updateBackgroundColor(animated: true)
+    updateBorderColor(animated: true)
   }
 
   @objc
@@ -292,6 +327,7 @@ open class AKButton: UIControl {
     isTapped = false
     updateForegroundAlpha(animated: true)
     updateBackgroundColor(animated: true)
+    updateBorderColor(animated: true)
     sendActions(for: .primaryActionTriggered)
     action?()
   }
@@ -301,6 +337,7 @@ open class AKButton: UIControl {
     isTapped = true
     updateForegroundAlpha(animated: true)
     updateBackgroundColor(animated: true)
+    updateBorderColor(animated: true)
   }
 
   @objc
@@ -308,9 +345,37 @@ open class AKButton: UIControl {
     isTapped = false
     updateForegroundAlpha(animated: true)
     updateBackgroundColor(animated: true)
+    updateBorderColor(animated: true)
   }
 
   // MARK: Animations
+
+  private func updateBorderColor(animated: Bool) {
+    guard
+      let borderStyle = configuration.borderStyle?(state),
+      let tappedBorderColor = tappedBorderColor else {
+        return
+    }
+
+    let animations = {
+      self.backgroundView.layer.borderColor = self.isTapped
+        ? tappedBorderColor.cgColor
+        : borderStyle.color.cgColor
+    }
+
+    if !animated {
+      animations()
+    }
+    else {
+      UIView.animate(
+        withDuration: configuration.tapAnimationDuration,
+        delay: 0,
+        options: [.beginFromCurrentState],
+        animations: animations,
+        completion: nil
+      )
+    }
+  }
 
   private func updateBackgroundColor(animated: Bool) {
     guard let tappedBackgroundColor = tappedBackgroundColor else {
