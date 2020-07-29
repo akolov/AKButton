@@ -336,10 +336,10 @@ open class AKButton: UIControl {
       animations()
     }
     else {
-      UIView.animate(
-        withDuration: configuration.tapAnimationDuration,
-        delay: 0,
-        options: [.beginFromCurrentState],
+      UIView.transition(
+        with: backgroundView,
+        duration: configuration.tapAnimationDuration,
+        options: [.beginFromCurrentState, .transitionCrossDissolve],
         animations: animations,
         completion: nil
       )
@@ -355,10 +355,10 @@ open class AKButton: UIControl {
       animations()
     }
     else {
-      UIView.animate(
-        withDuration: configuration.tapAnimationDuration,
-        delay: 0,
-        options: [.beginFromCurrentState],
+      UIView.transition(
+        with: backgroundView,
+        duration: configuration.tapAnimationDuration,
+        options: [.beginFromCurrentState, .transitionCrossDissolve],
         animations: animations,
         completion: nil
       )
