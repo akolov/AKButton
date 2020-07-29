@@ -39,7 +39,6 @@ open class AKButton: UIControl {
       borderStyle: ((UIControl.State) -> BorderStyle?)? = nil,
       tapAnimationDuration: TimeInterval = 0.3,
       tappedForegroundAlpha: CGFloat = 0.75,
-      tappedBrightnessOffset: CGFloat = -0.1,
       font: UIFont = {
         let font = UIFont.systemFont(ofSize: 16, weight: .bold)
         let metrics = UIFontMetrics(forTextStyle: .body)
