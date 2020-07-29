@@ -332,18 +332,22 @@ open class AKButton: UIControl {
       self.backgroundView.layer.borderWidth = borderStyle?.width ?? 0
     }
 
-    if !animated {
-      animations()
+    if animated {
+      let colorAnimation = CABasicAnimation(keyPath: "borderColor")
+      colorAnimation.toValue = borderStyle?.color.cgColor
+
+      let widthAnimation = CABasicAnimation(keyPath: "borderWidth")
+      widthAnimation.toValue = borderStyle?.width
+
+      let groupAnimation = CAAnimationGroup()
+      groupAnimation.animations = [colorAnimation, widthAnimation]
+      groupAnimation.duration = configuration.tapAnimationDuration
+
+      backgroundView.layer.removeAnimation(forKey: "border")
+      backgroundView.layer.add(groupAnimation, forKey: "border")
     }
-    else {
-      UIView.transition(
-        with: backgroundView,
-        duration: configuration.tapAnimationDuration,
-        options: [.beginFromCurrentState, .transitionCrossDissolve],
-        animations: animations,
-        completion: nil
-      )
-    }
+
+    animations()
   }
 
   private func updateBackgroundColor(animated: Bool) {
