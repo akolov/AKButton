@@ -264,7 +264,7 @@ open class AKButton: UIControl {
   open override func layoutSubviews() {
     super.layoutSubviews()
     if configuration.shadowStyle != nil
-    && backgroundView.layer.shadowPath?.boundingBoxOfPath != backgroundView.bounds {
+    && layer.shadowPath?.boundingBoxOfPath != bounds {
       updateShadowPath()
     }
   }
