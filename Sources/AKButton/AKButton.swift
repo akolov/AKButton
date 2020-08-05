@@ -45,7 +45,7 @@ open class AKButton: UIControl {
     public var backgroundColor: (UIControl.State) -> UIColor
     public var foregroundColor: (UIControl.State) -> UIColor
     public var borderStyle: ((UIControl.State) -> BorderStyle?)?
-    public var shadowStyle: ShadowStyle?
+    public var shadowStyle: ((UIControl.State) -> ShadowStyle?)?
     public var tapAnimationDuration: TimeInterval
     public var tappedForegroundAlpha: CGFloat
     public var font: UIFont
@@ -57,7 +57,7 @@ open class AKButton: UIControl {
       backgroundColor: @escaping (UIControl.State) -> UIColor = { _ in .systemBlue },
       foregroundColor: @escaping (UIControl.State) -> UIColor = { _ in .white },
       borderStyle: ((UIControl.State) -> BorderStyle?)? = nil,
-      shadowStyle: ShadowStyle? = nil,
+      shadowStyle: ((UIControl.State) -> ShadowStyle?)? = nil,
       tapAnimationDuration: TimeInterval = 0.3,
       tappedForegroundAlpha: CGFloat = 0.75,
       font: UIFont = {
@@ -278,16 +278,6 @@ open class AKButton: UIControl {
     foregroundView.spacing = configuration.spacing
     foregroundView.layoutMargins = configuration.layoutMargins
 
-    if let shadowStyle = configuration.shadowStyle {
-      backgroundView.layer.shadowOffset = shadowStyle.offset
-      backgroundView.layer.shadowRadius = shadowStyle.radius
-      backgroundView.layer.shadowOpacity = shadowStyle.alpha
-      backgroundView.layer.shadowColor = shadowStyle.color.cgColor
-    }
-    else {
-      backgroundView.layer.shadowOpacity = 0
-    }
-
     if attributedTitle?(state) == nil {
       titleLabel.font = configuration.font
     }
@@ -305,6 +295,16 @@ open class AKButton: UIControl {
     let borderStyle = configuration.borderStyle?(state)
     backgroundView.layer.borderColor = borderStyle?.color.cgColor
     backgroundView.layer.borderWidth = borderStyle?.width ?? 0
+
+    if let shadowStyle = configuration.shadowStyle?(state) {
+      backgroundView.layer.shadowOffset = shadowStyle.offset
+      backgroundView.layer.shadowRadius = shadowStyle.radius
+      backgroundView.layer.shadowOpacity = shadowStyle.alpha
+      backgroundView.layer.shadowColor = shadowStyle.color.cgColor
+    }
+    else {
+      backgroundView.layer.shadowOpacity = 0
+    }
 
     updateTitle()
   }
@@ -335,7 +335,7 @@ open class AKButton: UIControl {
   }
 
   private func updateShadowPath() {
-    guard configuration.shadowStyle != nil else {
+    guard configuration.shadowStyle?(state) != nil else {
       backgroundView.layer.shadowPath = nil
       return
     }
