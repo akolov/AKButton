@@ -341,7 +341,7 @@ open class AKButton: UIControl {
     }
 
     layer.shadowPath = UIBezierPath(
-      roundedRect: backgroundView.bounds,
+      roundedRect: bounds,
       cornerRadius: configuration.cornerRadius
     ).cgPath
   }
