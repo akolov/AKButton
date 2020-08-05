@@ -12,6 +12,10 @@ import RxSwift
 
 extension Reactive where Base: AKButton {
 
+  public var tap: ControlEvent<Void> {
+    return controlEvent(.touchUpInside)
+  }
+
   public var isLoading: Binder<Bool> {
     return Binder(base) { button, value in
       button.isLoading = value
