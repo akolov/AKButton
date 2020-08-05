@@ -21,11 +21,31 @@ open class AKButton: UIControl {
     }
   }
 
+  public struct ShadowStyle {
+    public var alpha: Float
+    public var color: UIColor
+    public var offset: CGSize
+    public var radius: CGFloat
+
+    public init(
+      alpha: Float = 0,
+      color: UIColor = .black,
+      offset: CGSize = CGSize(width: 0, height: -3),
+      radius: CGFloat = 3
+    ) {
+      self.alpha = alpha
+      self.color = color
+      self.offset = offset
+      self.radius = radius
+    }
+  }
+
   public struct Configuration {
     public var cornerRadius: CGFloat
     public var backgroundColor: (UIControl.State) -> UIColor
     public var foregroundColor: (UIControl.State) -> UIColor
     public var borderStyle: ((UIControl.State) -> BorderStyle?)?
+    public var shadowStyle: ShadowStyle?
     public var tapAnimationDuration: TimeInterval
     public var tappedForegroundAlpha: CGFloat
     public var font: UIFont
@@ -37,6 +57,7 @@ open class AKButton: UIControl {
       backgroundColor: @escaping (UIControl.State) -> UIColor = { _ in .systemBlue },
       foregroundColor: @escaping (UIControl.State) -> UIColor = { _ in .white },
       borderStyle: ((UIControl.State) -> BorderStyle?)? = nil,
+      shadowStyle: ShadowStyle? = nil,
       tapAnimationDuration: TimeInterval = 0.3,
       tappedForegroundAlpha: CGFloat = 0.75,
       font: UIFont = {
@@ -51,6 +72,7 @@ open class AKButton: UIControl {
       self.backgroundColor = backgroundColor
       self.foregroundColor = foregroundColor
       self.borderStyle = borderStyle
+      self.shadowStyle = shadowStyle
       self.tapAnimationDuration = tapAnimationDuration
       self.tappedForegroundAlpha = tappedForegroundAlpha
       self.font = font
@@ -169,7 +191,7 @@ open class AKButton: UIControl {
     return loadingIndicator
   }()
 
-  // MARK: Initializer
+  // MARK: Initialization
 
   public override init(frame: CGRect) {
     self.configuration = Configuration()
@@ -237,6 +259,16 @@ open class AKButton: UIControl {
     addTarget(self, action: #selector(didDragOutside), for: [.touchDragExit, .touchCancel])
   }
 
+  // MARK: View Lifecycle
+
+  open override func layoutSubviews() {
+    super.layoutSubviews()
+    if configuration.shadowStyle != nil
+    && backgroundView.layer.shadowPath?.boundingBoxOfPath != backgroundView.bounds {
+      updateShadowPath()
+    }
+  }
+
   // MARK: Private methods
 
   private func configure() {
@@ -245,6 +277,16 @@ open class AKButton: UIControl {
     backgroundView.layer.cornerRadius = configuration.cornerRadius
     foregroundView.spacing = configuration.spacing
     foregroundView.layoutMargins = configuration.layoutMargins
+
+    if let shadowStyle = configuration.shadowStyle {
+      backgroundView.layer.shadowOffset = shadowStyle.offset
+      backgroundView.layer.shadowRadius = shadowStyle.radius
+      backgroundView.layer.shadowOpacity = shadowStyle.alpha
+      backgroundView.layer.shadowColor = shadowStyle.color.cgColor
+    }
+    else {
+      backgroundView.layer.shadowOpacity = 0
+    }
 
     if attributedTitle?(state) == nil {
       titleLabel.font = configuration.font
@@ -290,6 +332,18 @@ open class AKButton: UIControl {
     }
 
     titleLabel.isHidden = titleLabel.text == nil && titleLabel.attributedText == nil
+  }
+
+  private func updateShadowPath() {
+    guard configuration.shadowStyle != nil else {
+      backgroundView.layer.shadowPath = nil
+      return
+    }
+
+    backgroundView.layer.shadowPath = UIBezierPath(
+      roundedRect: backgroundView.bounds,
+      cornerRadius: configuration.cornerRadius
+    ).cgPath
   }
 
   // MARK: Tap handling
