@@ -306,6 +306,7 @@ open class AKButton: UIControl {
       layer.shadowOpacity = 0
     }
 
+    updateShadowPath()
     updateTitle()
   }
 
