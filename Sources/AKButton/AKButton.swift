@@ -245,14 +245,20 @@ open class AKButton: UIControl {
     backgroundView.layer.cornerRadius = configuration.cornerRadius
     foregroundView.spacing = configuration.spacing
     foregroundView.layoutMargins = configuration.layoutMargins
-    titleLabel.font = configuration.font
+
+    if attributedTitle?(state) == nil {
+      titleLabel.font = configuration.font
+    }
   }
 
   private func updateState() {
     backgroundView.backgroundColor = configuration.backgroundColor(state)
-    titleLabel.textColor = configuration.foregroundColor(state)
     imageView.tintColor = configuration.foregroundColor(state)
     loadingIndicator.color = configuration.foregroundColor(state)
+
+    if attributedTitle?(state) == nil {
+      titleLabel.textColor = configuration.foregroundColor(state)
+    }
 
     let borderStyle = configuration.borderStyle?(state)
     backgroundView.layer.borderColor = borderStyle?.color.cgColor
