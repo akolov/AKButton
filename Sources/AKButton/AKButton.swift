@@ -297,13 +297,13 @@ open class AKButton: UIControl {
     backgroundView.layer.borderWidth = borderStyle?.width ?? 0
 
     if let shadowStyle = configuration.shadowStyle?(state) {
-      backgroundView.layer.shadowOffset = shadowStyle.offset
-      backgroundView.layer.shadowRadius = shadowStyle.radius
-      backgroundView.layer.shadowOpacity = shadowStyle.alpha
-      backgroundView.layer.shadowColor = shadowStyle.color.cgColor
+      layer.shadowOffset = shadowStyle.offset
+      layer.shadowRadius = shadowStyle.radius
+      layer.shadowOpacity = shadowStyle.alpha
+      layer.shadowColor = shadowStyle.color.cgColor
     }
     else {
-      backgroundView.layer.shadowOpacity = 0
+      layer.shadowOpacity = 0
     }
 
     updateTitle()
@@ -336,11 +336,11 @@ open class AKButton: UIControl {
 
   private func updateShadowPath() {
     guard configuration.shadowStyle?(state) != nil else {
-      backgroundView.layer.shadowPath = nil
+      layer.shadowPath = nil
       return
     }
 
-    backgroundView.layer.shadowPath = UIBezierPath(
+    layer.shadowPath = UIBezierPath(
       roundedRect: backgroundView.bounds,
       cornerRadius: configuration.cornerRadius
     ).cgPath
