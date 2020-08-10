@@ -197,7 +197,8 @@ open class AKButton: UIControl {
     let config = Configuration(
       cornerRadius: 0,
       backgroundColor: { _ in .clear },
-      foregroundColor: { _ in .clear }
+      foregroundColor: { _ in .clear },
+      margins: .zero
     )
 
     let button = AKButton(configuration: config)
