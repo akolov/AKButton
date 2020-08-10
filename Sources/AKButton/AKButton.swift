@@ -193,6 +193,18 @@ open class AKButton: UIControl {
 
   // MARK: Initialization
 
+  public static func empty() -> AKButton {
+    let config = Configuration(
+      cornerRadius: 0,
+      backgroundColor: { _ in .clear },
+      foregroundColor: { _ in .clear }
+    )
+
+    let button = AKButton(configuration: config)
+    button.title = { _ in nil }
+    return button
+  }
+
   public override init(frame: CGRect) {
     self.configuration = Configuration()
     super.init(frame: frame)
