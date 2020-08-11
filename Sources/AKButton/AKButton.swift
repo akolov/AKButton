@@ -51,6 +51,7 @@ open class AKButton: UIControl {
     public var font: UIFont
     public var spacing: CGFloat
     public var layoutMargins: UIEdgeInsets
+    public var extendedTapInsets: UIEdgeInsets
 
     public static let empty = Configuration(
       cornerRadius: 0,
@@ -73,7 +74,8 @@ open class AKButton: UIControl {
         return metrics.scaledFont(for: font)
       }(),
       spacing: CGFloat = 15,
-      margins: UIEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+      margins: UIEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8),
+      extendedTapInsets: UIEdgeInsets = .zero
     ) {
       self.cornerRadius = cornerRadius
       self.backgroundColor = backgroundColor
@@ -85,6 +87,7 @@ open class AKButton: UIControl {
       self.font = font
       self.spacing = spacing
       self.layoutMargins = margins
+      self.extendedTapInsets = extendedTapInsets
     }
   }
 
@@ -278,6 +281,15 @@ open class AKButton: UIControl {
     && layer.shadowPath?.boundingBoxOfPath != bounds {
       updateShadowPath()
     }
+  }
+
+  open override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+    guard configuration.extendedTapInsets != .zero else {
+      return super.point(inside: point, with: event)
+    }
+
+    let rect = bounds.inset(by: configuration.extendedTapInsets)
+    return rect.contains(point)
   }
 
   @available(*, unavailable)
