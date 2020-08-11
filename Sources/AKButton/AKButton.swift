@@ -102,12 +102,11 @@ open class AKButton: UIControl {
     }
   }
 
-  public var image: (UIControl.State) -> (UIImage?, UIImageView.ContentMode) = { _ in (nil, .scaleToFill) } {
+  public var image: (UIControl.State) -> UIImage? = { _ in nil } {
     didSet {
-      let (_image, contentMode) = image(state)
+      let _image = image(state)
       imageView.image = _image
       imageView.isHidden = _image == nil
-      imageView.contentMode = contentMode
     }
   }
 
