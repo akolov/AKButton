@@ -52,6 +52,13 @@ open class AKButton: UIControl {
     public var spacing: CGFloat
     public var layoutMargins: UIEdgeInsets
 
+    public static let empty = Configuration(
+      cornerRadius: 0,
+      backgroundColor: { _ in .clear },
+      foregroundColor: { _ in .clear },
+      margins: .zero
+    )
+
     public init(
       cornerRadius: CGFloat = 8,
       backgroundColor: @escaping (UIControl.State) -> UIColor = { _ in .systemBlue },
@@ -193,14 +200,7 @@ open class AKButton: UIControl {
   // MARK: Initialization
 
   public static func empty() -> AKButton {
-    let config = Configuration(
-      cornerRadius: 0,
-      backgroundColor: { _ in .clear },
-      foregroundColor: { _ in .clear },
-      margins: .zero
-    )
-
-    let button = AKButton(configuration: config)
+    let button = AKButton(configuration: .empty)
     button.title = { _ in nil }
     return button
   }
