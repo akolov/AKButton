@@ -265,10 +265,10 @@ open class AKButton: UIControl {
       loadingIndicator.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor)
     ])
 
-    addTarget(self, action: #selector(didTouchDownInside), for: [.touchDown, .touchDownRepeat])
-    addTarget(self, action: #selector(didTouchUpInside), for: [.touchUpInside])
-    addTarget(self, action: #selector(didDragInside), for: [.touchDragEnter])
-    addTarget(self, action: #selector(didDragOutside), for: [.touchDragExit, .touchCancel])
+    super.addTarget(self, action: #selector(didTouchDownInside), for: [.touchDown, .touchDownRepeat])
+    super.addTarget(self, action: #selector(didTouchUpInside), for: [.touchUpInside])
+    super.addTarget(self, action: #selector(didDragInside), for: [.touchDragEnter])
+    super.addTarget(self, action: #selector(didDragOutside), for: [.touchDragExit, .touchCancel])
   }
 
   // MARK: View Lifecycle
@@ -282,8 +282,13 @@ open class AKButton: UIControl {
   }
 
   @available(*, unavailable)
+  open override func addTarget(_ target: Any?, action: Selector, for controlEvents: UIControl.Event) {
+    // noop
+  }
+
+  @available(*, unavailable)
   open override func removeTarget(_ target: Any?, action: Selector?, for controlEvents: UIControl.Event) {
-    super.removeTarget(target, action: action, for: controlEvents)
+    // noop
   }
 
   // MARK: Private methods
