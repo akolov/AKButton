@@ -283,12 +283,12 @@ open class AKButton: UIControl {
 
   @available(*, unavailable)
   open override func addTarget(_ target: Any?, action: Selector, for controlEvents: UIControl.Event) {
-    // noop
+    super.addTarget(target, action: action, for: controlEvents)
   }
 
   @available(*, unavailable)
   open override func removeTarget(_ target: Any?, action: Selector?, for controlEvents: UIControl.Event) {
-    // noop
+    super.removeTarget(target, action: action, for: controlEvents)
   }
 
   // MARK: Private methods
