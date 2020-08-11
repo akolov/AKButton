@@ -281,6 +281,11 @@ open class AKButton: UIControl {
     }
   }
 
+  @available(*, unavailable)
+  open override func removeTarget(_ target: Any?, action: Selector?, for controlEvents: UIControl.Event) {
+    super.removeTarget(target, action: action, for: controlEvents)
+  }
+
   // MARK: Private methods
 
   private func configure() {
