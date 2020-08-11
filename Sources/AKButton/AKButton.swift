@@ -49,6 +49,7 @@ open class AKButton: UIControl {
     public var tapAnimationDuration: TimeInterval
     public var tappedForegroundAlpha: CGFloat
     public var font: UIFont
+    public var contentAlignment: UIStackView.Alignment
     public var spacing: CGFloat
     public var layoutMargins: UIEdgeInsets
 
@@ -65,6 +66,7 @@ open class AKButton: UIControl {
         let metrics = UIFontMetrics(forTextStyle: .body)
         return metrics.scaledFont(for: font)
       }(),
+      contentAlignment: UIStackView.Alignment = .center,
       spacing: CGFloat = 15,
       margins: UIEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
     ) {
@@ -76,6 +78,7 @@ open class AKButton: UIControl {
       self.tapAnimationDuration = tapAnimationDuration
       self.tappedForegroundAlpha = tappedForegroundAlpha
       self.font = font
+      self.contentAlignment = contentAlignment
       self.spacing = spacing
       self.layoutMargins = margins
     }
@@ -161,7 +164,7 @@ open class AKButton: UIControl {
   public private(set) lazy var foregroundView: UIStackView = {
     let foregroundView = UIStackView()
     foregroundView.axis = .horizontal
-    foregroundView.alignment = .center
+    foregroundView.alignment = configuration.contentAlignment
     foregroundView.translatesAutoresizingMaskIntoConstraints = false
     foregroundView.isLayoutMarginsRelativeArrangement = true
     foregroundView.layoutMargins = self.configuration.layoutMargins
@@ -288,6 +291,7 @@ open class AKButton: UIControl {
     updateState()
 
     backgroundView.layer.cornerRadius = configuration.cornerRadius
+    foregroundView.alignment = configuration.contentAlignment
     foregroundView.spacing = configuration.spacing
     foregroundView.layoutMargins = configuration.layoutMargins
 
