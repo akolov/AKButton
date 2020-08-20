@@ -228,6 +228,8 @@ open class AKButton: UIControl {
   private func commonInit() {
     configure()
 
+    backgroundColor = .clear
+
     addSubview(containerView)
     containerView.addSubview(backgroundView)
     containerView.addSubview(foregroundView)
