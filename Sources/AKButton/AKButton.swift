@@ -269,6 +269,8 @@ open class AKButton: UIControl {
       loadingIndicator.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor)
     ])
 
+    containerView.setContentCompressionResistancePriority(.required, for: .vertical)
+    foregroundView.setContentCompressionResistancePriority(.required, for: .vertical)
     titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
 
     super.addTarget(self, action: #selector(didTouchDownInside), for: [.touchDown, .touchDownRepeat])
