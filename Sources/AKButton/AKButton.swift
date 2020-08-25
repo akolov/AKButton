@@ -107,9 +107,7 @@ open class AKButton: UIControl {
 
   public var image: (UIControl.State) -> UIImage? = { _ in nil } {
     didSet {
-      let _image = image(state)
-      imageView.image = _image
-      imageView.isHidden = _image == nil
+      updateImage()
     }
   }
 
@@ -347,6 +345,7 @@ open class AKButton: UIControl {
 
     updateShadowPath()
     updateTitle()
+    updateImage()
   }
 
   private func updateLoadingState() {
@@ -372,6 +371,11 @@ open class AKButton: UIControl {
     }
 
     titleLabel.isHidden = titleLabel.text == nil && titleLabel.attributedText == nil
+  }
+
+  private func updateImage() {
+    imageView.image = image(state)
+    imageView.isHidden = imageView.image == nil
   }
 
   private func updateShadowPath() {
