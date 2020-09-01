@@ -306,6 +306,18 @@ open class AKButton: UIControl {
     super.removeTarget(target, action: action, for: controlEvents)
   }
 
+  open override func setContentHuggingPriority(_ priority: UILayoutPriority, for axis: NSLayoutConstraint.Axis) {
+    super.setContentHuggingPriority(priority, for: axis)
+    titleLabel.setContentHuggingPriority(priority, for: axis)
+    imageView.setContentHuggingPriority(priority, for: axis)
+  }
+
+  open override func setContentCompressionResistancePriority(_ priority: UILayoutPriority, for axis: NSLayoutConstraint.Axis) {
+    super.setContentCompressionResistancePriority(priority, for: axis)
+    titleLabel.setContentCompressionResistancePriority(priority, for: axis)
+    imageView.setContentCompressionResistancePriority(priority, for: axis)
+  }
+
   // MARK: Private methods
 
   private func configure() {
