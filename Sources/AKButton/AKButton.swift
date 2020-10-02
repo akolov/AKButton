@@ -158,7 +158,7 @@ open class AKButton: UIControl {
 
   public private(set) lazy var backgroundView: UIView = {
     let backgroundView = UIView()
-    if #available(iOS 13.0, *) {
+    if #available(iOS 13.0, tvOS 13.0, *) {
       backgroundView.layer.cornerCurve = .continuous
     }
     backgroundView.translatesAutoresizingMaskIntoConstraints = false
