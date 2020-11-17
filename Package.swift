@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
   name: "AKButton",
   platforms: [
-    .iOS(.v12), .tvOS(.v12)
+    .iOS(.v12)
   ],
   products: [
     .library(name: "AKButton", targets: ["AKButton"]),
