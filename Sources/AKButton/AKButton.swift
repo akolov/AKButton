@@ -42,6 +42,7 @@ open class AKButton: UIControl {
 
   public struct Configuration {
     public var cornerRadius: CGFloat
+    public var cornerCurve: CALayerCornerCurve
     public var backgroundColor: (UIControl.State) -> UIColor
     public var foregroundColor: (UIControl.State) -> UIColor
     public var borderStyle: ((UIControl.State) -> BorderStyle?)?
@@ -62,6 +63,7 @@ open class AKButton: UIControl {
 
     public init(
       cornerRadius: CGFloat = 8,
+      cornerCurve: CALayerCornerCurve = .continuous,
       backgroundColor: @escaping (UIControl.State) -> UIColor = { _ in .systemBlue },
       foregroundColor: @escaping (UIControl.State) -> UIColor = { _ in .white },
       borderStyle: ((UIControl.State) -> BorderStyle?)? = nil,
@@ -78,6 +80,7 @@ open class AKButton: UIControl {
       extendedTapInsets: UIEdgeInsets = .zero
     ) {
       self.cornerRadius = cornerRadius
+      self.cornerCurve = cornerCurve
       self.backgroundColor = backgroundColor
       self.foregroundColor = foregroundColor
       self.borderStyle = borderStyle
@@ -158,9 +161,7 @@ open class AKButton: UIControl {
 
   public private(set) lazy var backgroundView: UIView = {
     let backgroundView = UIView()
-    if #available(iOS 13.0, tvOS 13.0, *) {
-      backgroundView.layer.cornerCurve = .continuous
-    }
+    backgroundView.layer.cornerCurve = self.configuration.cornerCurve
     backgroundView.translatesAutoresizingMaskIntoConstraints = false
     return backgroundView
   }()
@@ -170,6 +171,7 @@ open class AKButton: UIControl {
     foregroundView.axis = .horizontal
     foregroundView.translatesAutoresizingMaskIntoConstraints = false
     foregroundView.isLayoutMarginsRelativeArrangement = true
+    foregroundView.insetsLayoutMarginsFromSafeArea = false
     foregroundView.layoutMargins = self.configuration.layoutMargins
     return foregroundView
   }()
@@ -324,6 +326,7 @@ open class AKButton: UIControl {
     updateState()
 
     backgroundView.layer.cornerRadius = configuration.cornerRadius
+    backgroundView.layer.cornerCurve = configuration.cornerCurve
     foregroundView.spacing = configuration.spacing
     foregroundView.layoutMargins = configuration.layoutMargins
 
