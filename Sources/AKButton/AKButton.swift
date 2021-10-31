@@ -40,6 +40,10 @@ open class AKButton: UIControl {
     }
   }
 
+  public enum ImageAlignment {
+    case left, right
+  }
+
   public struct Configuration {
     public var cornerRadius: CGFloat
     public var cornerCurve: CALayerCornerCurve
@@ -51,6 +55,7 @@ open class AKButton: UIControl {
     public var tappedForegroundAlpha: CGFloat
     public var font: UIFont
     public var spacing: CGFloat
+    public var imageAlignment: ImageAlignment
     public var layoutMargins: UIEdgeInsets
     public var extendedTapInsets: UIEdgeInsets
 
@@ -75,6 +80,7 @@ open class AKButton: UIControl {
         let metrics = UIFontMetrics(forTextStyle: .body)
         return metrics.scaledFont(for: font)
       }(),
+      imageAlignment: ImageAlignment = .left,
       spacing: CGFloat = 15,
       margins: UIEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8),
       extendedTapInsets: UIEdgeInsets = .zero
@@ -88,6 +94,7 @@ open class AKButton: UIControl {
       self.tapAnimationDuration = tapAnimationDuration
       self.tappedForegroundAlpha = tappedForegroundAlpha
       self.font = font
+      self.imageAlignment = imageAlignment
       self.spacing = spacing
       self.layoutMargins = margins
       self.extendedTapInsets = extendedTapInsets
@@ -323,6 +330,13 @@ open class AKButton: UIControl {
   // MARK: Private methods
 
   private func configure() {
+    switch configuration.imageAlignment {
+    case .left:
+      foregroundView.insertArrangedSubview(imageView, at: 0)
+    case .right:
+      foregroundView.insertArrangedSubview(titleLabel, at: 0)
+    }
+
     updateState()
 
     backgroundView.layer.cornerRadius = configuration.cornerRadius
