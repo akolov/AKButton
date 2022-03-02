@@ -121,7 +121,7 @@ open class AKButton: UIControl {
     }
   }
 
-  public var action: (() -> Void)?
+  public var tapHandler: (() -> Void)?
 
   open var configuration: Configuration {
     didSet {
@@ -436,7 +436,7 @@ open class AKButton: UIControl {
     updateBackgroundColor(animated: true)
     updateBorderStyle(animated: true)
     sendActions(for: .primaryActionTriggered)
-    action?()
+    tapHandler?()
   }
 
   @objc
